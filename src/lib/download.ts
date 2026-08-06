@@ -8,35 +8,37 @@ function isAppleMobile() {
   return iOSDevice || iPadOs;
 }
 
-function startBackgroundDownload(downloadUrl: string) {
-  const iframe = document.createElement("iframe");
-  iframe.src = downloadUrl;
-  iframe.setAttribute("aria-hidden", "true");
-  iframe.setAttribute("tabindex", "-1");
-  iframe.style.cssText =
-    "position:fixed;width:0;height:0;border:0;opacity:0;pointer-events:none;left:-9999px;top:-9999px";
-  document.body.appendChild(iframe);
-
-  window.setTimeout(() => {
-    iframe.remove();
-  }, 60_000);
-}
-
 /**
- * Inicia o download sem roubar o foco (iframe) e redireciona a aba atual
- * para o WhatsApp — no iPhone, `target=_blank` no Drive deixava o grupo
- * “esquecido” atrás da aba de download.
+ * Dispara o download do ebook e leva ao grupo do WhatsApp.
+ *
+ * - iOS: duas abas no mesmo gesto de toque (Drive não baixa via iframe).
+ *   WhatsApp abre por último para ficar em foco.
+ * - Demais: download em nova aba + a aba atual vai para o WhatsApp.
  */
 export function downloadThenRedirect(
   downloadUrl: string,
   redirectUrl: string,
   delayMs = 1200,
 ) {
-  startBackgroundDownload(downloadUrl);
+  if (isAppleMobile()) {
+    window.open(downloadUrl, "_blank", "noopener,noreferrer");
 
-  const wait = isAppleMobile() ? Math.min(delayMs, 700) : delayMs;
+    // Segundo open síncrono (ainda no gesto do usuário) — evita bloqueio de popup
+    // e deixa o WhatsApp como última aba em foco no Safari.
+    const whatsappTab = window.open(redirectUrl, "_blank", "noopener,noreferrer");
+    whatsappTab?.focus();
+    return;
+  }
+
+  const anchor = document.createElement("a");
+  anchor.href = downloadUrl;
+  anchor.target = "_blank";
+  anchor.rel = "noopener noreferrer";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
 
   window.setTimeout(() => {
     window.location.assign(redirectUrl);
-  }, wait);
+  }, delayMs);
 }

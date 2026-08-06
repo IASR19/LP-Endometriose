@@ -61,6 +61,17 @@ export function EbookFinalScreen({ className }: EbookFinalScreenProps) {
         >
           {busy ? "Abrindo..." : "Baixe seu ebook gratuitamente"}
         </button>
+
+        {busy ? (
+          <a
+            href={leadMagnetConfig.whatsappGroupUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-[8%] left-1/2 z-20 w-[80%] -translate-x-1/2 rounded-full bg-[#1a1816]/90 px-3 py-2.5 text-center text-[12px] font-medium text-[#f2e8d5] backdrop-blur-sm"
+          >
+            Se o grupo não abriu, toque aqui
+          </a>
+        ) : null}
       </div>
     </section>
   );
