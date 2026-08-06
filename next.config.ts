@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
+const basePath = "/endometriose";
+
 const nextConfig: NextConfig = {
+  basePath,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
@@ -11,6 +17,8 @@ const nextConfig: NextConfig = {
   async headers() {
     const immutable = "public, max-age=31536000, immutable";
 
+    // Com basePath, o Next prefixa `source` automaticamente
+    // (/images → /endometriose/images).
     return [
       {
         source: "/images/:path*",
