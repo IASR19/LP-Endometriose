@@ -12,7 +12,9 @@ export const leadMagnetConfig = {
   /** Delay entre início do download e redirect ao WhatsApp. */
   redirectDelayMs: 1200,
   avatarSrc: "/images/chat-avatar-dra.png",
-  finalScreenSrc: "/images/final-screen-hd.png",
+  finalScreenSrc: "/images/final-screen.webp",
+  finalScreenWidth: 1290,
+  finalScreenHeight: 2293,
 } as const;
 
 export const siteMeta = {

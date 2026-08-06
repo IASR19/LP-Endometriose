@@ -37,10 +37,10 @@ export function EbookFinalScreen({ className }: EbookFinalScreenProps) {
         <Image
           src={leadMagnetConfig.finalScreenSrc}
           alt="Clique no botão para baixar o ebook gratuito sobre endometriose"
-          width={1290}
-          height={2293}
-          priority
+          width={leadMagnetConfig.finalScreenWidth}
+          height={leadMagnetConfig.finalScreenHeight}
           quality={95}
+          priority
           sizes="(max-width: 448px) 100vw, 448px"
           draggable={false}
           className="pointer-events-none h-auto w-full select-none"
@@ -53,7 +53,6 @@ export function EbookFinalScreen({ className }: EbookFinalScreenProps) {
           className={cn(
             "cta-pulse absolute z-20 flex items-center justify-center rounded-full",
             "bg-[#7d6448] px-3 text-center font-semibold uppercase leading-[1.15] tracking-[0.03em] text-white",
-            /* espaço vazio à direita do livro, acima do @grapeclinic_ */
             "left-[42%] top-[72.5%] h-[6.2%] w-[50%]",
             "text-[clamp(0.5rem,2.45vw,0.72rem)]",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c4a574] focus-visible:ring-offset-2",
