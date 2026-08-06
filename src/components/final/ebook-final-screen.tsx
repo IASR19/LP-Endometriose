@@ -37,9 +37,11 @@ export function EbookFinalScreen({ className }: EbookFinalScreenProps) {
         <Image
           src={leadMagnetConfig.finalScreenSrc}
           alt="Clique no botão para baixar o ebook gratuito sobre endometriose"
-          width={1080}
-          height={1920}
+          width={1290}
+          height={2293}
           priority
+          quality={95}
+          sizes="(max-width: 448px) 100vw, 448px"
           draggable={false}
           className="pointer-events-none h-auto w-full select-none"
         />
