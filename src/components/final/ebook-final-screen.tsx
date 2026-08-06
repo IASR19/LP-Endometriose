@@ -1,0 +1,67 @@
+"use client";
+
+import Image from "next/image";
+import { useState } from "react";
+
+import { leadMagnetConfig } from "@/content/lead-magnet";
+import { downloadThenRedirect } from "@/lib/download";
+import { cn } from "@/lib/utils";
+
+type EbookFinalScreenProps = {
+  className?: string;
+};
+
+export function EbookFinalScreen({ className }: EbookFinalScreenProps) {
+  const [busy, setBusy] = useState(false);
+
+  function handleDownload() {
+    if (busy) return;
+    setBusy(true);
+
+    downloadThenRedirect(
+      leadMagnetConfig.ebookDownloadUrl,
+      leadMagnetConfig.whatsappGroupUrl,
+      leadMagnetConfig.redirectDelayMs,
+    );
+  }
+
+  return (
+    <section
+      className={cn(
+        "relative mx-auto flex min-h-dvh w-full max-w-md items-center justify-center bg-[#1a1816] px-0 sm:bg-[#ebe6dc] sm:px-4 sm:py-4",
+        className,
+      )}
+      aria-label="Acesso ao ebook"
+    >
+      <div className="relative w-full overflow-hidden sm:rounded-sm">
+        <Image
+          src={leadMagnetConfig.finalScreenSrc}
+          alt="Clique no botão para baixar o ebook gratuito sobre endometriose"
+          width={1080}
+          height={1920}
+          priority
+          draggable={false}
+          className="pointer-events-none h-auto w-full select-none"
+        />
+
+        <button
+          type="button"
+          onClick={handleDownload}
+          disabled={busy}
+          className={cn(
+            "cta-pulse absolute z-20 flex items-center justify-center rounded-full",
+            "bg-[#7d6448] px-3 text-center font-semibold uppercase leading-[1.15] tracking-[0.03em] text-white",
+            /* espaço vazio à direita do livro, acima do @grapeclinic_ */
+            "left-[42%] top-[72.5%] h-[6.2%] w-[50%]",
+            "text-[clamp(0.5rem,2.45vw,0.72rem)]",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c4a574] focus-visible:ring-offset-2",
+            "hover:bg-[#6e573e]",
+            busy ? "cursor-wait opacity-90" : "cursor-pointer",
+          )}
+        >
+          {busy ? "Abrindo..." : "Baixe seu ebook gratuitamente"}
+        </button>
+      </div>
+    </section>
+  );
+}
