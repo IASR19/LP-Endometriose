@@ -24,14 +24,14 @@ export function ChatBubble({ text, from = "bot" }: ChatBubbleProps) {
       )}
     >
       {isBot ? (
-        <span className="mb-0.5 inline-flex size-8 shrink-0 overflow-hidden rounded-full bg-[#3b2822]">
+        <span className="mb-0.5 inline-flex size-8 shrink-0 overflow-hidden rounded-full bg-[#e8e0d4] ring-1 ring-[#e4e4e4]">
           {/* img nativo evita cache do otimizador do next/image */}
           <img
             src={leadMagnetConfig.avatarSrc}
-            alt=""
+            alt="Dra. Marcela"
             width={32}
             height={32}
-            className="size-8 object-cover"
+            className="size-8 object-cover object-[center_18%]"
             decoding="async"
           />
         </span>

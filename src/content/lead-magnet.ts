@@ -11,7 +11,7 @@ export const leadMagnetConfig = {
     "https://chat.whatsapp.com/IRX54cUtzbzHyTTUzJqQM7?s=sh&p=a&ilr=0",
   /** Delay entre início do download e redirect ao WhatsApp. */
   redirectDelayMs: 1200,
-  avatarSrc: "/images/chat-avatar-v2.png",
+  avatarSrc: "/images/chat-avatar-dra.png",
   finalScreenSrc: "/images/final-screen-v2.png",
 } as const;
 
