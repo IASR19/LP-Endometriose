@@ -34,6 +34,7 @@ export function LeadChat() {
   const [error, setError] = useState<string | null>(null);
   const [finished, setFinished] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const runIdRef = useRef(0);
   const messageSeqRef = useRef(0);
   const revealedStepsRef = useRef(new Set<string>());
@@ -50,15 +51,44 @@ export function LeadChat() {
     answersRef.current = answers;
   }, [answers]);
 
-  const scrollToBottom = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  const scrollToBottom = useCallback((smooth = true) => {
+    const container = scrollRef.current;
+    const bottom = bottomRef.current;
+
+    const run = () => {
+      if (bottom) {
+        bottom.scrollIntoView({
+          behavior: smooth ? "smooth" : "auto",
+          block: "end",
+        });
+      }
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: smooth ? "smooth" : "auto",
+        });
+      }
+    };
+
+    // Espera o layout do novo balão/input (animação + paint)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(run);
+    });
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom(true);
+    // Recalcula depois da animação de entrada do balão (~350ms)
+    const id = window.setTimeout(() => scrollToBottom(true), 380);
+    return () => window.clearTimeout(id);
   }, [messages, revealing, error, scrollToBottom]);
+
+  // Quando o input/choices aparecem após o reveal
+  useEffect(() => {
+    if (revealing) return;
+    const id = window.setTimeout(() => scrollToBottom(true), 100);
+    return () => window.clearTimeout(id);
+  }, [revealing, stepId, scrollToBottom]);
 
   const beginStep = useCallback((nextStepId: string) => {
     setError(null);
@@ -202,10 +232,10 @@ export function LeadChat() {
         : "text";
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-[#f3f3f3]">
+    <div className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-[#f3f3f3]">
       <div
         ref={scrollRef}
-        className="flex flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-6 pt-8"
+        className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto overscroll-contain px-4 pb-8 pt-8"
       >
         {messages.map((message) => (
           <ChatBubble
@@ -239,6 +269,8 @@ export function LeadChat() {
             onSelect={handleChoice}
           />
         ) : null}
+
+        <div ref={bottomRef} className="h-px w-full shrink-0" aria-hidden />
       </div>
     </div>
   );
